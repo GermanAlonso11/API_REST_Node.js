@@ -13,7 +13,7 @@ const initDatabase = async () => {
             { name: 'Lider de Proyecto', description: 'Gestiona proyectos y equipos' },
             { name: 'Desarrollador', description: 'Implementa funcionalidades' },
             { name: 'QA', description: 'Revisa y valida el trabajo' },
-            { name: 'Cliente', description: 'Visualiza el progreso del proyecto' }
+            // { name: 'Cliente', description: 'Visualiza el progreso del proyecto' }
             
         ];
 

@@ -8,7 +8,13 @@ const swaggerOptions = {
     info: {
       title: 'Prueba Técnica API',
       version: '1.0.0',
-      description: 'API REST para gestión de usuarios y roles - Prueba técnica para puesto Jr Backend',
+      description: `API REST para gestión de usuarios y roles - Prueba técnica para puesto Jr Backend
+
+**Notas importantes:**
+- Los usuarios deben tener un roleId válido (1-4 para los roles predefinidos)
+- El campo 'password' es opcional en la creación de usuarios
+- El campo 'roleId' en las peticiones se mapea internamente a 'role_id' en la base de datos
+- Los roles predefinidos son: Administrador (1), Lider de Proyecto (2), Desarrollador (3), QA (4)`,
       contact: {
         name: 'German Alonso Aguiniga Ascencio',
         email: 'german.alonso@email.com'
@@ -34,7 +40,6 @@ const swaggerOptions = {
       schemas: {
         User: {
           type: 'object',
-          required: ['name', 'email', 'password', 'roleId'],
           properties: {
             id: {
               type: 'integer',
@@ -56,10 +61,12 @@ const swaggerOptions = {
             },
             password: {
               type: 'string',
-              description: 'Contraseña del usuario',
+              description: 'Contraseña del usuario (opcional)',
+              minLength: 6,
+              maxLength: 255,
               example: 'password123'
             },
-            roleId: {
+            role_id: {
               type: 'integer',
               description: 'ID del rol asignado al usuario',
               example: 1
@@ -80,7 +87,7 @@ const swaggerOptions = {
         },
         UserInput: {
           type: 'object',
-          required: ['name', 'email', 'password', 'roleId'],
+          required: ['name', 'email', 'roleId'],
           properties: {
             name: {
               type: 'string',
@@ -97,12 +104,14 @@ const swaggerOptions = {
             },
             password: {
               type: 'string',
-              description: 'Contraseña del usuario',
+              description: 'Contraseña del usuario (opcional)',
+              minLength: 6,
+              maxLength: 255,
               example: 'password123'
             },
             roleId: {
               type: 'integer',
-              description: 'ID del rol asignado al usuario',
+              description: 'ID del rol asignado al usuario (se mapea internamente a role_id)',
               example: 1
             }
           }

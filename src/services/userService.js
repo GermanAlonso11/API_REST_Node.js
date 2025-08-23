@@ -1,17 +1,28 @@
 //Importar modelo
 const usr = require('../models/User.js');
 const RoleService = require('./roleService.js');
+const { Op } = require('sequelize');
 
 const roleService = new RoleService();
 
 //Validar email unico con manejo de errores
-const validateUniqueEmail = async (email) => {
+const validateUniqueEmail = async (email, excludeId = null) => {
     try {
-        const user = await usr.findOne({ where: { email } });
+        const whereCondition = { email };
+        
+        // Si se proporciona un ID a excluir, agregarlo a la condición
+        if (excludeId) {
+            whereCondition.id = { [Op.ne]: excludeId };
+        }
+        
+        const user = await usr.findOne({ where: whereCondition });
         if (user) {
             throw new Error('El email ya está en uso');
         }
     } catch (error) {
+        if (error.message === 'El email ya está en uso') {
+            throw error;
+        }
         throw new Error('Error al validar el email');
     }
 };
@@ -96,20 +107,51 @@ const getUserById = async (id) => {
 // Actualizar un usuario por su ID
 const updateUser = async (id, userData) => {
     try {
+        console.log('🔄 Actualizando usuario:', { id, userData });
+        
         const user = await getUserById(id);
         if (!user) {
             throw new Error('Usuario no encontrado');
         }
 
-        // Validar y actualizar datos del usuario
-        await validateUniqueEmail(userData.email);
-        await validateNameLength(userData.name);
-        await validateValidRole(userData.roleId);
+        // Validar solo si el email ha cambiado
+        if (userData.email && userData.email !== user.email) {
+            await validateUniqueEmail(userData.email, id);
+        }
+        
+        // Validar nombre si se proporciona
+        if (userData.name) {
+            await validateNameLength(userData.name);
+        }
+        
+        // Validar rol si se proporciona
+        if (userData.roleId) {
+            await validateValidRole(userData.roleId);
+        }
 
-        await usr.update(userData, { where: { id } });
-        return { ...user, ...userData };
+        // Mapear roleId a role_id para la base de datos
+        const updateData = { ...userData };
+        if (userData.roleId) {
+            updateData.role_id = userData.roleId;
+            delete updateData.roleId;
+        }
+
+        console.log('📝 Datos a actualizar en BD:', updateData);
+        
+        const [affectedRows] = await usr.update(updateData, { where: { id } });
+        
+        if (affectedRows === 0) {
+            throw new Error('No se pudo actualizar el usuario');
+        }
+
+        // Obtener el usuario actualizado
+        const updatedUser = await getUserById(id);
+        console.log('✅ Usuario actualizado exitosamente:', updatedUser.toJSON());
+        
+        return updatedUser;
     } catch (error) {
-        throw new Error('Error al actualizar el usuario');
+        console.error('❌ Error en updateUser:', error.message);
+        throw error;
     }
 };
 

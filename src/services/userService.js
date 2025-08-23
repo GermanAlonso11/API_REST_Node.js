@@ -50,6 +50,25 @@ const validateNameLength = (name) => {
     }
 };
 
+//Validar password (mínimo 6 caracteres, máximo 255)
+const validatePassword = (password) => {
+    if (password !== undefined && password !== null && password !== '') {
+        // Convertir a string si no lo es
+        const passwordStr = String(password);
+        
+        if (passwordStr.length < 6) {
+            throw new Error('La contraseña debe tener al menos 2 caracteres');
+        }
+        
+        if (passwordStr.length > 10) {
+            throw new Error('La contraseña no puede tener más de 10 caracteres');
+        }
+        
+        return passwordStr;
+    }
+    return password; // null, undefined o string vacío se mantiene igual
+};
+
 //SECCION DE CRUD
 
 //CRUD - CREATE
@@ -60,6 +79,11 @@ const createUser = async (userData) => {
         await validateUniqueEmail(userData.email);
         await validateNameLength(userData.name);
         await validateValidRole(userData.roleId);
+        
+        // Validar password si se proporciona
+        if (userData.password !== undefined) {
+            userData.password = validatePassword(userData.password);
+        }
 
         // Mapear roleId a role_id para que coincida con el modelo
         const userDataForDB = {
@@ -128,6 +152,11 @@ const updateUser = async (id, userData) => {
         if (userData.roleId) {
             await validateValidRole(userData.roleId);
         }
+        
+        // Validar password si se proporciona
+        if (userData.password !== undefined) {
+            userData.password = validatePassword(userData.password);
+        }
 
         // Mapear roleId a role_id para la base de datos
         const updateData = { ...userData };
@@ -175,6 +204,7 @@ module.exports = {
     validateUniqueEmail,
     validateValidRole,
     validateNameLength,
+    validatePassword,
     createUser,
     getAllUsers,
     getUserById,

@@ -1,6 +1,8 @@
 //Importar modelo
 import usr from '../models/User.js';
-import roleController from '../controllers/roleController';
+import RoleService from './roleService.js';
+
+const roleService = new RoleService();
 
 //Validar email unico con manejo de errores
 export const validateUniqueEmail = async (email) => {
@@ -17,7 +19,7 @@ export const validateUniqueEmail = async (email) => {
 //Validar rol valido
 export const validateValidRole = async (roleId) => {
     try {
-        const role = await roleController.getRoleById(roleId);
+        const role = await roleService.getRoleById(roleId);
         if (!role) {
             throw new Error('El rol no es válido');
         }

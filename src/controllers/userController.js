@@ -1,18 +1,21 @@
-//Importar modelo
-import usr from '../models/User.js';
-
-//Importar sequelize
-import {Op} from 'sequelize';
+//Importar servicio
+import * as userService from '../services/userService.js';
 
 //CRUD - CREATE
 //Crear usuario
 export const createUser = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, roleId } = req.body;
     try {
-        const newUser = await usr.create({ name, email, password });
-        res.status(201).json(newUser);
+        const newUser = await userService.createUser({ name, email, password, roleId });
+        return res.status(201).json({
+            message: 'User created successfully',
+            user: newUser
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ 
+            message: error.message,
+            data: {}
+        });
     }
 };
 
@@ -20,55 +23,89 @@ export const createUser = async (req, res) => {
 //Obtener todos los usuarios
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await usr.findAll();
-        res.status(200).json(users);
+        const users = await userService.getAllUsers();
+        return res.status(200).json({
+            message: 'Users fetched successfully',
+            users
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({
+            message: error.message,
+            data: {}
+        });
     }
 };
 
+//CRUD - READ by ID
 //Obtener un usuario por ID
 export const getUserById = async (req, res) => {
     const { id } = req.params;
     try {
-        const user = await usr.findByPk(id);
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-        res.status(200).json(user);
+        const user = await userService.getUserById(id);
+        return res.status(200).json({
+            message: 'User fetched successfully',
+            user
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.message === 'Usuario no encontrado') {
+            return res.status(404).json({ 
+                message: error.message,
+                data: {}
+            });
+        } else {
+            return res.status(500).json({
+                message: error.message,
+                data: {}
+            });
+        }
     }
 };
 
+//CRUD - UPDATE
 //Actualizar un usuario por ID
 export const updateUserById = async (req, res) => {
     const { id } = req.params;
-    const { name, email, password } = req.body;
+    const { name, email, password, roleId } = req.body;
     try {
-        const user = await usr.findByPk(id);
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-        const updatedUser = await user.update({ name, email, password });
-        res.status(200).json(updatedUser);
+        const updatedUser = await userService.updateUser(id, { name, email, password, roleId });
+        return res.status(200).json({
+            message: 'User updated successfully',
+            user: updatedUser
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.message === 'Usuario no encontrado') {
+            return res.status(404).json({ 
+                message: error.message,
+                data: {}
+            });
+        } else {
+            return res.status(500).json({
+                message: error.message,
+                data: {}
+            });
+        }
     }
 };
 
+//CRUD - DELETE
 //Eliminar un usuario por ID
 export const deleteUserById = async (req, res) => {
     const { id } = req.params;
     try {
-        const user = await usr.findByPk(id);
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-        await user.destroy();
-        res.status(204).send();
+        await userService.deleteUser(id);
+        return res.status(204).send();
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.message === 'Usuario no encontrado') {
+            return res.status(404).json({ 
+                message: error.message,
+                data: {}
+            });
+        } else {
+            return res.status(500).json({
+                message: error.message,
+                data: {}
+            });
+        }
     }
 };
 

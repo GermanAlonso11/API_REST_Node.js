@@ -1,6 +1,14 @@
 const express = require('express');
+const cors = require('cors');
 const testConnection = require('./config/database');
 const initDatabase = require('./scripts/initDB');
+
+// Importar rutas
+const roleRoutes = require('./routes/roles');
+const userRoutes = require('./routes/users');
+
+// Importar configuración de Swagger
+const { swaggerUi, swaggerSpec } = require('./docs/swagger');
 
 const app = express();
 
@@ -8,8 +16,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Configuración de Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 //Rutas
 app.use('/api/roles', roleRoutes);
+app.use('/api/users', userRoutes);
 
 //Manejo de rutas no encontradas
 app.use('*', (req, res) => {

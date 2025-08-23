@@ -5,6 +5,22 @@ const initDatabase = require('./scripts/initDB');
 const app = express();
 
 //Configuracion de middleware
+app.use(cors());
+app.use(express.json());
+
+//Rutas
+app.use('/api/roles', roleRoutes);
+
+//Manejo de rutas no encontradas
+app.use('*', (req, res) => {
+    res.status(404).json({error: 'Ruta no encontrada'});
+});
+
+//Manejo de errores general
+app.use((error, req, res, next) => {
+    console.error(error);
+    res.status(500).json({error: 'Error interno del servidor'});
+});
 
 //Inicializar la base de datos
 const startServer = async () => {
@@ -26,3 +42,5 @@ const startServer = async () => {
 };
 
 startServer();
+
+module.exports = app;

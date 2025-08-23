@@ -56,12 +56,12 @@ const validatePassword = (password) => {
         // Convertir a string si no lo es
         const passwordStr = String(password);
         
-        if (passwordStr.length < 6) {
+        if (passwordStr.length < 2) {
             throw new Error('La contraseña debe tener al menos 2 caracteres');
         }
         
-        if (passwordStr.length > 10) {
-            throw new Error('La contraseña no puede tener más de 10 caracteres');
+        if (passwordStr.length > 12) {
+            throw new Error('La contraseña no puede tener más de 12 caracteres');
         }
         
         return passwordStr;
@@ -131,7 +131,7 @@ const getUserById = async (id) => {
 // Actualizar un usuario por su ID
 const updateUser = async (id, userData) => {
     try {
-        console.log('🔄 Actualizando usuario:', { id, userData });
+        console.log('Actualizando usuario:', { id, userData });
         
         const user = await getUserById(id);
         if (!user) {
@@ -165,7 +165,7 @@ const updateUser = async (id, userData) => {
             delete updateData.roleId;
         }
 
-        console.log('📝 Datos a actualizar en BD:', updateData);
+        console.log('Datos a actualizar en BD:', updateData);
         
         const [affectedRows] = await usr.update(updateData, { where: { id } });
         
@@ -175,11 +175,11 @@ const updateUser = async (id, userData) => {
 
         // Obtener el usuario actualizado
         const updatedUser = await getUserById(id);
-        console.log('✅ Usuario actualizado exitosamente:', updatedUser.toJSON());
+        console.log('Usuario actualizado exitosamente:', updatedUser.toJSON());
         
         return updatedUser;
     } catch (error) {
-        console.error('❌ Error en updateUser:', error.message);
+        console.error('Error en updateUser:', error.message);
         throw error;
     }
 };
@@ -189,6 +189,9 @@ const updateUser = async (id, userData) => {
 const deleteUser = async (id) => {
     try {
         const user = await getUserById(id);
+
+        console.log('Usuario eliminado exitosamente:', user.toJSON());
+
         if (!user) {
             throw new Error('Usuario no encontrado');
         }

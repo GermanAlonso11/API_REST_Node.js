@@ -1,5 +1,5 @@
 //Importar servicio
-import * as userService from '../services/userService.js';
+const userService = require('../services/userService.js');
 
 /**
  * @swagger
@@ -35,7 +35,7 @@ import * as userService from '../services/userService.js';
  */
 //CRUD - CREATE
 //Crear usuario
-export const createUser = async (req, res) => {
+const createUser = async (req, res) => {
     const { name, email, password, roleId } = req.body;
     try {
         const newUser = await userService.createUser({ name, email, password, roleId });
@@ -81,7 +81,7 @@ export const createUser = async (req, res) => {
  */
 //CRUD - READ
 //Obtener todos los usuarios
-export const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
     try {
         const users = await userService.getAllUsers();
         return res.status(200).json({
@@ -137,7 +137,7 @@ export const getAllUsers = async (req, res) => {
  */
 //CRUD - READ by ID
 //Obtener un usuario por ID
-export const getUserById = async (req, res) => {
+const getUserById = async (req, res) => {
     const { id } = req.params;
     try {
         const user = await userService.getUserById(id);
@@ -207,7 +207,7 @@ export const getUserById = async (req, res) => {
  */
 //CRUD - UPDATE
 //Actualizar un usuario por ID
-export const updateUserById = async (req, res) => {
+const updateUserById = async (req, res) => {
     const { id } = req.params;
     const { name, email, password, roleId } = req.body;
     try {
@@ -262,7 +262,7 @@ export const updateUserById = async (req, res) => {
  */
 //CRUD - DELETE
 //Eliminar un usuario por ID
-export const deleteUserById = async (req, res) => {
+const deleteUserById = async (req, res) => {
     const { id } = req.params;
     try {
         await userService.deleteUser(id);
@@ -283,7 +283,7 @@ export const deleteUserById = async (req, res) => {
 };
 
 //Exportar controlador
-export default {
+module.exports = {
     createUser,
     getAllUsers,
     getUserById,

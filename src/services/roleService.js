@@ -1,5 +1,5 @@
 //Importar modelo
-import Role from '../models/Role.js';
+const Role = require('../models/Role.js');
 
 const DEFAULT_ROLE = 'Desarrollador';
 
@@ -118,3 +118,5 @@ class RoleService {
         }
     }
 }
+
+module.exports = RoleService;

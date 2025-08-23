@@ -190,7 +190,6 @@ const swaggerOptions = {
     }
   },
   apis: [
-    './src/routes/*.js',
     './src/controllers/*.js'
   ]
 };

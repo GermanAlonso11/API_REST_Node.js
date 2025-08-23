@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const testConnection = require('./config/database');
+const { testConnection } = require('./config/database');
 const initDatabase = require('./scripts/initDB');
 
 // Importar rutas
@@ -47,6 +47,7 @@ const startServer = async () => {
         const PORT = process.env.PORT || 3000;
         app.listen(PORT, () => {
             console.log(`Servidor escuchando en el puerto ${PORT}`);
+            console.log(`Documentación de API disponible en http://localhost:${PORT}/api-docs`);
         });
     } catch (error) {
         console.error('Error al iniciar el servidor:', error);

@@ -1,4 +1,4 @@
-import RoleService from '../services/roleService.js';
+const RoleService = require('../services/roleService.js');
 
 const roleService = new RoleService();
 
@@ -36,7 +36,7 @@ const roleService = new RoleService();
  */
 // CRUD - CREATE
 // Crear un nuevo rol
-export const createRole = async (req, res) => {
+const createRole = async (req, res) => {
     const { name, description } = req.body;
 
     try {
@@ -83,7 +83,7 @@ export const createRole = async (req, res) => {
  */
 //CRUD - READ
 // Obtener todos los roles
-export const getAllRoles = async (req, res) => {
+const getAllRoles = async (req, res) => {
     try {
         const roles = await roleService.getAllRoles();
         return res.status(200).json({
@@ -139,7 +139,7 @@ export const getAllRoles = async (req, res) => {
  */
 //CRUD - READ by ID
 // Obtener un rol por su ID
-export const getRoleById = async (req, res) => {
+const getRoleById = async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -211,7 +211,7 @@ export const getRoleById = async (req, res) => {
  */
 //CRUD - UPDATE
 // Actualizar un rol por su ID
-export const updateRole = async (req, res) => {
+const updateRole = async (req, res) => {
     const { id } = req.params;
     const { name, description } = req.body;
 
@@ -267,7 +267,7 @@ export const updateRole = async (req, res) => {
  */
 //CRUD - DELETE
 //Eliminar un rol por su ID
-export const deleteRole = async (req, res) => {
+const deleteRole = async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -288,7 +288,7 @@ export const deleteRole = async (req, res) => {
     }
 };
 
-export default {
+module.exports = {
     createRole,
     getAllRoles,
     getRoleById,

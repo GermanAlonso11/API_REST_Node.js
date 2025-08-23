@@ -24,6 +24,13 @@ const User = sequelize.define('User', {
       notEmpty: true
     }
     },
+    password: {
+    type: datatypes.STRING,
+    allowNull: true, // Lo hacemos opcional por ahora
+    validate: {
+      len: [6, 255]
+    }
+    },
     role_id: {
     type: datatypes.INTEGER,
     allowNull: false,

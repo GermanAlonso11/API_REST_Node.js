@@ -48,7 +48,7 @@ class RoleService {
             }
             return role;
         } catch (error) {
-            
+            throw new Error('Error fetching role: ' + error.message);
         }
     }
 

@@ -1,159 +1,120 @@
-//Importar modelo
-import Role from '../models/Role.js';
-//Importar sequelize
-import { Op } from 'sequelize';
+import RoleService from '../services/roleService.js';
 
-//CRUD - CREATE
-//Crear rol
+const roleService = new RoleService();
+
+// CRUD - CREATE
+// Crear un nuevo rol
 export const createRole = async (req, res) => {
     const { name, description } = req.body;
+
     try {
-        const newRole = await Role.create({
-            name,
-            description
-        }, {
-            fields: ['name', 'description']
+        const newRole = await roleService.createRole({ name, description });
+        return res.status(201).json({
+            message: 'Role created successfully',
+            role: newRole
         });
-        if (newRole) {
-            return res.status(201).json({
-                message: 'Role created successfully',
-                data: newRole
-            });
-        }
     } catch (error) {
-        res.status(500).json({
-            message: 'Something goes wrong',
+        return res.status(500).json({ 
+            message: error.message,
             data: {}
         });
     }
 };
 
 //CRUD - READ
-//Obtener todos los roles
-export const getRoles = async (req, res) => {
+// Obtener todos los roles
+export const getAllRoles = async (req, res) => {
     try {
-        const roles = await Role.findAll();
-        res.json({
-            data: roles
+        const roles = await roleService.getAllRoles();
+        return res.status(200).json({
+            message: 'Roles fetched successfully',
+            roles
         });
     } catch (error) {
-        res.status(500).json({
-            message: 'Something goes wrong',
+        return res.status(500).json({
+            message: error.message,
             data: {}
         });
     }
 };
 
-//CRUD - READ - READ BY ID
-//Obtener un rol por id
+//CRUD - READ by ID
+// Obtener un rol por su ID
 export const getRoleById = async (req, res) => {
     const { id } = req.params;
+
     try {
-        const role = await Role.findOne({
-            where: {
-                id
-            }
+        const role = await roleService.getRoleById(id);
+        res.json({
+            data: role
         });
-        if (role) {
-            res.json({
-                data: role
-            });
+    } catch (error) {
+        if (error.message === 'Role not found') {
+            return res.status(404).json({ message: error.message,
+                data: {}
+             });
         } else {
-            res.status(404).json({
-                message: 'Role not found',
+            return res.status(500).json({
+                message: error.message,
                 data: {}
             });
         }
-    } catch (error) {
-        res.status(500).json({
-            message: 'Something goes wrong',
-            data: {}
-        });
-    }
-};
 
-//CRUD - READ - SEARCH BY NAME OR DESCRIPTION
-//Buscar roles por nombre o descripción
-export const searchRoles = async (req, res) => {
-    const { query } = req.params;
-    try {
-        const roles = await Role.findAll({
-            where: {
-                [Op.or]: [
-                    { name: { [Op.like]: `%${query}%` } },
-                    { description: { [Op.like]: `%${query}%` } }
-                ]
-            }
-        });
-        res.json({
-            data: roles
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: 'Something goes wrong',
-            data: {}
-        });
     }
 };
 
 //CRUD - UPDATE
-//Actualizar rol
+// Actualizar un rol por su ID
 export const updateRole = async (req, res) => {
     const { id } = req.params;
     const { name, description } = req.body;
+
     try {
-        const [updated] = await Role.update({
-            name,
-            description
-        }, {
-            where: { id }
+        const updatedRole = await roleService.updateRole(id, { name, description });
+        res.status(200).json({
+            message: 'Role updated successfully',
+            role: updatedRole
         });
-        if (updated) {
-            const updatedRole = await Role.findOne({ where: { id } });
-            return res.status(200).json({
-                message: 'Role updated successfully',
-                data: updatedRole
+    } catch (error) {
+        if (error.message === 'Role not found') {
+            return res.status(404).json({ message: error.message,
+                data: {}
+             });
+        } else {
+            return res.status(500).json({
+                message: error.message,
+                data: {}
             });
         }
-        throw new Error('Role not found');
-    } catch (error) {
-        res.status(500).json({
-            message: error.message || 'Something goes wrong',
-            data: {}
-        });
     }
 };
 
 //CRUD - DELETE
-//Eliminar rol
+//Eliminar un rol por su ID
 export const deleteRole = async (req, res) => {
     const { id } = req.params;
+
     try {
-        const deleted = await Role.destroy({
-            where: { id }
-        });
-        if (deleted) {
-            return res.status(200).json({
-                message: 'Role deleted successfully',
+        await roleService.deleteRole(id);
+        return res.status(204).send();
+    } catch (error) {
+        if (error.message === 'Role not found') {
+            return res.status(404).json({ message: error.message,
+                data: {}
+             });
+        } else {
+            return res.status(500).json({
+                message: error.message,
                 data: {}
             });
         }
-        throw new Error('Role not found');
-    } catch (error) {
-        res.status(500).json({
-            message: error.message || 'Something goes wrong',
-            data: {}
-        });
     }
 };
 
-//Exportar controlador
 export default {
     createRole,
-    getRoles,
+    getAllRoles,
     getRoleById,
     updateRole,
-    deleteRole,
-    searchRoles
+    deleteRole
 };
-

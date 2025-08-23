@@ -26,3 +26,20 @@ exports.validateRoleUpdate = (req, res, next) => {
     }
     next();
 };
+
+//Validar el nombre de usuario
+exports.validateUserName = (req, res, next) => {
+    const {username} = req.body;
+
+    if (!username) {
+        return res.status(400).json({error: 'El nombre de usuario es obligatorio'})
+    }
+
+    //Validar cantidad de caracteres del nombre de usuario
+    if (username.length <2 || username.length >50) {
+        return res.status(400).json({
+            error: 'El nombre de usuario debe tener entre 2 y 50 caracteres'
+        });
+    }
+    next();
+};

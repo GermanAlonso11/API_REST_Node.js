@@ -4,13 +4,15 @@ API REST desarrollada con **Node.js**, **Express** y **Sequelize** para la gesti
 
 ## 📋 Tabla de Contenidos
 
-- [Requisitos Previos](#requisitos-previos)
-- [Instalación y Configuración](#instalación-y-configuración)
-- [Configuración de Base de Datos](#configuración-de-base-de-datos)
-- [Ejecución del Proyecto](#ejecución-del-proyecto)
-- [Documentación de la API](#documentación-de-la-api)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [🔧 Requisitos Previos](#🔧-requisitos-previos)
+- [⚙️ Instalación y Configuración](#⚙️-instalación-y-configuración)
+- [🗄️ Configuración de Base de Datos](#🗄️-configuración-de-base-de-datos)
+- [🚀 Ejecución del Proyecto](#🚀-ejecución-del-proyecto)
+- [📚 Documentación de la API](#📚-documentación-de-la-api)
+- [📁 Estructura del Proyecto](#📁-estructura-del-proyecto)
+- [🛠️ Tecnologías Utilizadas](#🛠️-tecnologías-utilizadas)
+- [🚨 Solución de Problemas Comunes](#🚨-solución-de-problemas-comunes)
+- [👤 Autor](#👤-autor)
 
 ---
 

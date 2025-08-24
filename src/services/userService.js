@@ -28,16 +28,16 @@ const validateUniqueEmail = async (email, excludeId = null) => {
 };
 
 //Validar rol valido
-const validateValidRole = async (roleId) => {
+const validateValidRole = async (role_id) => {
     try {
-        const role = await roleService.getRoleById(roleId);
+        const role = await roleService.getRoleById(role_id);
         if (!role) {
             throw new Error('El rol no es válido');
         }
         return true;
     } catch (error) {
         if (error.message.includes('Role not found')) {
-            throw new Error(`El rol con ID ${roleId} no existe`);
+            throw new Error(`El rol con ID ${role_id} no existe`);
         }
         throw new Error(`Error al validar el rol: ${error.message}`);
     }
@@ -78,19 +78,19 @@ const createUser = async (userData) => {
         // Validar datos del usuario
         await validateUniqueEmail(userData.email);
         await validateNameLength(userData.name);
-        await validateValidRole(userData.roleId);
+        await validateValidRole(userData.role_id);
         
         // Validar password si se proporciona
         if (userData.password !== undefined) {
             userData.password = validatePassword(userData.password);
         }
 
-        // Mapear roleId a role_id para que coincida con el modelo
+        // Crear usuario directamente con role_id
         const userDataForDB = {
             name: userData.name,
             email: userData.email,
             password: userData.password || null, // Opcional
-            role_id: userData.roleId
+            role_id: userData.role_id
         };
 
         // Crear usuario
@@ -98,6 +98,7 @@ const createUser = async (userData) => {
         return newUser;
     } catch (error) {
         console.error('Error en createUser:', error);
+        throw new Error(`Error al crear el usuario: ${error.message}`);
         throw new Error(`Error al crear el usuario: ${error.message}`);
     }
 };
@@ -149,8 +150,8 @@ const updateUser = async (id, userData) => {
         }
         
         // Validar rol si se proporciona
-        if (userData.roleId) {
-            await validateValidRole(userData.roleId);
+        if (userData.role_id) {
+            await validateValidRole(userData.role_id);
         }
         
         // Validar password si se proporciona
@@ -158,12 +159,8 @@ const updateUser = async (id, userData) => {
             userData.password = validatePassword(userData.password);
         }
 
-        // Mapear roleId a role_id para la base de datos
+        // Los datos ya vienen con role_id, no necesita mapeo
         const updateData = { ...userData };
-        if (userData.roleId) {
-            updateData.role_id = userData.roleId;
-            delete updateData.roleId;
-        }
 
         console.log('Datos a actualizar en BD:', updateData);
         

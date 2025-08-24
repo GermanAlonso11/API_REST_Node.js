@@ -36,9 +36,9 @@ const userService = require('../services/userService.js');
 //CRUD - CREATE
 //Crear usuario
 const createUser = async (req, res) => {
-    const { name, email, password, roleId } = req.body;
+    const { name, email, password, role_id } = req.body;
     try {
-        const newUser = await userService.createUser({ name, email, password, roleId });
+        const newUser = await userService.createUser({ name, email, password, role_id });
         return res.status(201).json({
             message: 'User created successfully',
             user: newUser
@@ -209,9 +209,9 @@ const getUserById = async (req, res) => {
 //Actualizar un usuario por ID
 const updateUserById = async (req, res) => {
     const { id } = req.params;
-    const { name, email, password, roleId } = req.body;
+    const { name, email, password, role_id } = req.body;
     try {
-        const updatedUser = await userService.updateUser(id, { name, email, password, roleId });
+        const updatedUser = await userService.updateUser(id, { name, email, password, role_id });
         return res.status(200).json({
             message: 'User updated successfully',
             user: updatedUser

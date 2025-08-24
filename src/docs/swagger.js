@@ -11,10 +11,20 @@ const swaggerOptions = {
       description: `API REST para gestión de usuarios y roles - Prueba técnica para puesto Jr Backend
 
 **Notas importantes:**
-- Los usuarios deben tener un roleId válido (1-4 para los roles predefinidos)
+- ✅ **Usar 'role_id' en todas las peticiones** (estándar del sistema)
+- Los usuarios deben tener un role_id válido (1-4 para los roles predefinidos)
 - El campo 'password' es opcional en la creación de usuarios
-- El campo 'roleId' en las peticiones se mapea internamente a 'role_id' en la base de datos
-- Los roles predefinidos son: Administrador (1), Lider de Proyecto (2), Desarrollador (3), QA (4)`,
+- Los roles predefinidos son: Administrador (1), Lider de Proyecto (2), Desarrollador (3), QA (4)
+
+**Formato estándar para peticiones:**
+\`\`\`json
+{
+  "name": "Nombre Usuario",
+  "email": "usuario@email.com", 
+  "password": "123456",
+  "role_id": 2
+}
+\`\`\``,
       contact: {
         name: 'German Alonso Aguiniga Ascencio',
         email: 'german.alonso@email.com'
@@ -87,7 +97,7 @@ const swaggerOptions = {
         },
         UserInput: {
           type: 'object',
-          required: ['name', 'email', 'roleId'],
+          required: ['name', 'email', 'role_id'],
           properties: {
             name: {
               type: 'string',
@@ -109,9 +119,9 @@ const swaggerOptions = {
               maxLength: 255,
               example: 'password123'
             },
-            roleId: {
+            role_id: {
               type: 'integer',
-              description: 'ID del rol asignado al usuario (se mapea internamente a role_id)',
+              description: 'ID del rol asignado al usuario',
               example: 1
             }
           }

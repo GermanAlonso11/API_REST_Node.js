@@ -1,5 +1,6 @@
 //Importar modelo
 const Role = require('../models/Role.js');
+const { Op } = require('sequelize');
 
 const DEFAULT_ROLE = 'Desarrollador';
 
@@ -31,7 +32,8 @@ class RoleService {
     async getAllRoles() {
         try {
             return await Role.findAll({
-                order: [['createdAt', 'DESC']]
+                //Ordenar por ID ascendente
+                order: [['id', 'ASC']]
             });
         } catch (error) {
             throw new Error("Error fetching roles: " + error.message);

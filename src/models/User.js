@@ -26,7 +26,7 @@ const User = sequelize.define('User', {
     },
     password: {
     type: datatypes.STRING,
-    allowNull: true, // Lo hacemos opcional por ahora
+    allowNull: false,
     validate: {
       len: [6, 255]
     }

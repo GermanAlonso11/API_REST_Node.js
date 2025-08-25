@@ -189,7 +189,7 @@ Esta documentación incluye:
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | `/api/roles` | Obtener todos los roles (con conteo de usuarios) |
+| GET | `/api/roles` | Obtener todos los roles |
 | GET | `/api/roles/:id` | Obtener un rol específico |
 | POST | `/api/roles` | Crear un nuevo rol |
 | PUT | `/api/roles/:id` | Actualizar un rol existente |

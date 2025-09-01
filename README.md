@@ -1,4 +1,4 @@
-# 🚀 API REST para Gestión de Usuarios y Roles con temática de Desarrolladores
+# API REST para Gestión de Usuarios y Roles con temática de Desarrolladores
 
 API REST desarrollada con **Node.js**, **Express** y **Sequelize** para la gestión de usuarios y roles con documentación automática usando **Swagger**.
 

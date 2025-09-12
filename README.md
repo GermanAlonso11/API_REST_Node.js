@@ -10,7 +10,7 @@ Antes de comenzar, asegúrate de tener instalado en tu sistema:
 
 1. **Node.js** (versión 16 o superior)
    - Descarga desde: https://nodejs.org/
-   - Verifica la instalación: `node --version`
+   - Verifica la instalación: `node --version`.
 
 2. **npm** (incluido con Node.js)
    - Verifica la instalación: `npm --version`

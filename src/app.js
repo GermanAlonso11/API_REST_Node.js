@@ -8,7 +8,7 @@ const initDatabase = require('./scripts/initDB');
 const roleRoutes = require('./routes/roles');
 const userRoutes = require('./routes/users');
 
-// Importar configuración de Swagger
+// Importar configuración de Swagger.
 const { swaggerUi, swaggerSpec } = require('./docs/swagger');
 
 const app = express();
